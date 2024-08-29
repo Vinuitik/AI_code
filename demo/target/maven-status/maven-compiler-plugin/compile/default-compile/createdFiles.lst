@@ -1,0 +1,6 @@
+com\example\Matrix.class
+com\example\HopfieldUI.class
+com\example\HopfieldUI$1.class
+com\example\Main.class
+com\example\WrongDimensionsException.class
+com\example\Vector.class
