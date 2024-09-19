@@ -1,5 +1,5 @@
 package com.example;
-//importing
+//importing utilities
 import javax.swing.SwingUtilities;
 //import com.example.HopfieldUI;
 
