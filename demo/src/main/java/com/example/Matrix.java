@@ -33,6 +33,19 @@ public class Matrix {
         this.columns =columns;
         matrix = new double[rows][columns];
     }
+    Matrix(int rows, int columns, double value){
+        if (rows <= 0 || columns <= 0) {
+            throw new IllegalArgumentException("Matrix dimensions must be positive.");
+        }
+        this.rows = rows;
+        this.columns =columns;
+        matrix = new double[rows][columns];
+        for(int i = 0;i<rows;++i){
+            for(int j = 0;j<columns;++j){
+                matrix[i][j] = value;
+            }
+        }
+    }
     public int getRows(){
         return rows;
     }
@@ -160,5 +173,30 @@ public class Matrix {
                 C.matrix[i + newSize][j + newSize] = C22.matrix[i][j];
             }
         }
+    }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                sb.append(matrix[i][j]);
+                if (j < columns - 1) sb.append(", ");
+            }
+            if (i < rows - 1) sb.append("\n");
+        }
+        return sb.toString();
+    }
+    public void print(){
+        for(int i = 0;i<matrix.length;++i){
+            for(int j = 0;j<matrix[i].length;++j){
+                System.out.print((int)matrix[i][j]+" ");
+            }
+            System.out.println("");
+        }
+        System.out.println("-------------------------------");
+    }
+    public double get(int index){
+        int row = index/columns;
+        int col = index%columns;
+        return matrix[row][col];
     }
 }

@@ -1,6 +1,9 @@
+com\example\mongoDb.class
+com\example\Main.class
+com\example\WrongDimensionsException.class
+com\example\HopfieldNetwork.class
+com\example\Vector.class
 com\example\Matrix.class
 com\example\HopfieldUI.class
 com\example\HopfieldUI$1.class
-com\example\Main.class
-com\example\WrongDimensionsException.class
-com\example\Vector.class
+com\example\NoWeightsException.class

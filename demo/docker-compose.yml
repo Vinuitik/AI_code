@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 29032006
+
+  #java-app:
+  #  build: .
+  #  container_name: java-app
+  #  depends_on:
+  #    - mongodb
+  #  environment:
+  #    MONGO_URI: mongodb://root:29032006@mongodb:27017/hopfieldDB
+  #  links:
+  #    - mongodb
+
+volumes:
+  mongo-data:
