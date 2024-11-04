@@ -13,25 +13,27 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.LinkedList;
+import java.util.Random;
 
 public class InteractivePointPlotter extends JFrame {
     private XYSeries series;
-    private XYSeries regressionLine; // Series to store regression line points
-    private JButton drawButton; // Button to draw regression line
+    private XYSeries regressionLine;
+    private JButton drawButton;
+    private JButton gradientDescentButton;
+    private JButton kMeansButton; // New button for KMeans Clustering
 
     public InteractivePointPlotter() {
         series = new XYSeries("Data Points");
         regressionLine = new XYSeries("Regression Line");
 
-        // Set up the JFrame
         setTitle("Interactive Point Plotter");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Create the chart with an empty dataset
         XYSeriesCollection dataset = new XYSeriesCollection(series);
-        dataset.addSeries(regressionLine); // Add regression line series
+        dataset.addSeries(regressionLine);
         JFreeChart chart = ChartFactory.createScatterPlot(
                 "Click to Add Points",
                 "X-Axis",
@@ -46,83 +48,156 @@ public class InteractivePointPlotter extends JFrame {
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setDomainZoomable(false);
         chartPanel.setRangeZoomable(false);
-        
-        // Set fixed ranges for both axes
         setChartRanges(chart);
 
-        // Mouse listener to add points
         chartPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Convert the click location to chart coordinates
                 XYPlot plot = (XYPlot) chart.getPlot();
                 Point2D point = chartPanel.translateScreenToJava2D(e.getPoint());
                 double x = plot.getDomainAxis().java2DToValue(point.getX(), chartPanel.getScreenDataArea(), plot.getDomainAxisEdge());
                 double y = plot.getRangeAxis().java2DToValue(point.getY(), chartPanel.getScreenDataArea(), plot.getRangeAxisEdge());
-
-                // Add the point to the series
                 series.add(x, y);
             }
         });
 
-        // Create a button to draw the regression line
         drawButton = new JButton("Draw Regression Line");
         drawButton.setBackground(Color.RED);
         drawButton.setForeground(Color.WHITE);
         drawButton.addActionListener(e -> updateRegressionLine());
 
-        // Add the button and chart panel to the frame
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(chartPanel, BorderLayout.CENTER);
-        panel.add(drawButton, BorderLayout.SOUTH);
-        getContentPane().add(panel);
+        gradientDescentButton = new JButton("Gradient Descent Line");
+        gradientDescentButton.setBackground(Color.BLUE);
+        gradientDescentButton.setForeground(Color.WHITE);
+        gradientDescentButton.addActionListener(e -> performGradientDescent());
+
+        kMeansButton = new JButton("KMeans Clustering");
+        kMeansButton.setBackground(Color.GREEN);
+        kMeansButton.setForeground(Color.WHITE);
+        kMeansButton.addActionListener(e -> performKMeansClustering());
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(drawButton);
+        buttonPanel.add(gradientDescentButton);
+        buttonPanel.add(kMeansButton);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(chartPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        getContentPane().add(mainPanel);
     }
 
-    // Method to set fixed ranges for both axes
     private void setChartRanges(JFreeChart chart) {
         XYPlot plot = chart.getXYPlot();
-        
-        // Set x-axis range from -10 to 10
         plot.getDomainAxis().setRange(-10, 10);
-        
-        // Set y-axis range from -10 to 10
         plot.getRangeAxis().setRange(-10, 10);
     }
 
-    // Method to update and draw the regression line
-    // Method to update and draw the regression line
-private void updateRegressionLine() {
-    // Clear previous regression line data
-    regressionLine.clear();
+    private void updateRegressionLine() {
+        regressionLine.clear();
+        if (series.getItemCount() < 2) {
+            System.out.println("Not enough points to perform regression.");
+            return;
+        }
 
-    // Check if there are enough points to perform regression
-    if (series.getItemCount() < 2) {
-        System.out.println("Not enough points to perform regression.");
-        return; // Skip the regression line update
+        double[] results = LinearRegression.linearReg(series);
+        double slope = results[1];
+        double intercept = results[0];
+
+        double minX = series.getMinX();
+        double maxX = series.getMaxX();
+        int numPoints = 100;
+
+        for (int i = 0; i <= numPoints; i++) {
+            double x = minX + (maxX - minX) * i / numPoints;
+            double y = slope * x + intercept;
+            regressionLine.add(x, y);
+        }
+        repaint();
     }
 
-    // Calculate regression coefficients
-    double[] results = LinearRegression.linearReg(series);
-    double slope = results[1];    // Gradient
-    double intercept = results[0]; // Intercept
+    private void performGradientDescent() {
+        regressionLine.clear();
+        if (series.getItemCount() < 2) {
+            System.out.println("Not enough points to perform gradient descent.");
+            return;
+        }
 
+        double[] results = LinearRegression.gradientDescent(series);
+        double slope = results[0];
+        double intercept = results[1];
 
-    // Determine the range of the x-axis
-    double minX = series.getMinX();
-    double maxX = series.getMaxX();
+        double minX = series.getMinX();
+        double maxX = series.getMaxX();
+        int numPoints = 100;
 
-    // Number of points for the regression line
-    int numPoints = 100; // Increase or decrease this for smoother/less smooth line
-
-    // Calculate and add points for the regression line
-    for (int i = 0; i <= numPoints; i++) {
-        double x = minX + (maxX - minX) * i / numPoints; // Evenly spaced x values
-        double y = slope * x + intercept; // Calculate corresponding y value
-        regressionLine.add(x, y); // Add point to regression line series
+        for (int i = 0; i <= numPoints; i++) {
+            double x = minX + (maxX - minX) * i / numPoints;
+            double y = slope * x + intercept;
+            regressionLine.add(x, y);
+        }
+        repaint();
     }
 
-    // Repaint the chart to show the updated regression line
-    repaint();
-}
-
+    private void performKMeansClustering() {
+        // Prompt the user to enter the number of clusters
+        String input = JOptionPane.showInputDialog(this, "Enter number of clusters:");
+        int k;
+        try {
+            k = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid number of clusters.");
+            return;
+        }
+    
+        // Ensure the number of clusters is positive
+        if (k <= 0) {
+            JOptionPane.showMessageDialog(this, "Number of clusters must be positive.");
+            return;
+        }
+    
+        // Perform K-means clustering
+        LinkedList<XYSeries> clusters = KMeans.perform(k, series);
+    
+        // Create a new dataset to hold the clusters
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        Random random = new Random();
+    
+        // Generate distinct colors for each cluster
+        Color[] colors = new Color[k];
+        for (int i = 0; i < k; i++) {
+            colors[i] = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)); // Random color for each cluster
+        }
+    
+        for (int i = 0; i < clusters.size(); i++) {
+            XYSeries cluster = clusters.get(i);
+            cluster.setKey("Cluster #" + (i + 1));
+            dataset.addSeries(cluster);
+        }
+    
+        // Safely update the dataset in the plot and apply colors
+        Component comp = getContentPane().getComponent(0);
+        if (comp instanceof JPanel) {
+            JPanel mainPanel = (JPanel) comp;
+            for (Component innerComp : mainPanel.getComponents()) {
+                if (innerComp instanceof ChartPanel) {
+                    ChartPanel chartPanel = (ChartPanel) innerComp;
+                    XYPlot plot = (XYPlot) chartPanel.getChart().getPlot();
+                    plot.setDataset(dataset);
+    
+                    // Apply color to each cluster series renderer
+                    for (int i = 0; i < clusters.size(); i++) {
+                        plot.getRenderer().setSeriesPaint(i, colors[i]);
+                    }
+                    
+                    repaint();
+                    return;
+                }
+            }
+        }
+    
+        JOptionPane.showMessageDialog(this, "Error: Chart panel not found.");
+    }
+    
+    
 }

@@ -65,14 +65,15 @@ public class LinearRegression {
 
         for(int i = 0;i<100;++i){
             for(int j = 0;j<n;++j){
-                XYDataItem item = data.getDataItem(i);
+                XYDataItem item = data.getDataItem(j);
                 double x = item.getXValue();
                 double y = item.getYValue();
 
-                res[0] = res[0] + (Math.sqrt(i)/i) * ( (y - res[0]*x-res[1]) )*x;
-                res[1] = res[1] + (Math.sqrt(i)/i) * (y-res[0]*x-res[1]);
+                res[0] = res[0] + 0.01*(Math.sqrt(i+1)/(i+1)) * ( (y - res[0]*x - res[1]) )*x;
+                res[1] = res[1] + 0.01*(Math.sqrt(i+1)/(i+1)) * (y - res[0]*x - res[1]);
 
             }
+            System.out.println("Run completed"+i+" "+res[0]+" "+res[1]);
         }
         return res;
     }
