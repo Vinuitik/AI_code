@@ -1,0 +1,5 @@
+# Ignore JDK files
+jdk-20/
+# Ignore specific large files
+jdk-20/lib/modules
+jdk-20_windows-x64_bin.exe

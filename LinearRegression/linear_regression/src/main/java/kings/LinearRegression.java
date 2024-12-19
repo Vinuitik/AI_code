@@ -120,11 +120,11 @@ public class LinearRegression {
             
 
             for(int j = 0;j<BREEDING_SIZE;++j){
-                //double[] bred1 ={ chromosome[j][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j+1][1] + 0.1*(-1 + 2 * Math.random())};
-                //double[] bred2 ={ chromosome[j+1][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j][1] + 0.1*(-1 + 2 * Math.random())};
+                double[] bred1 ={ chromosome[j][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j+1][1] + 0.1*(-1 + 2 * Math.random())};
+                double[] bred2 ={ chromosome[j+1][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j][1] + 0.1*(-1 + 2 * Math.random())};
 
-                double[] bred1 ={ chromosome[j][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j][1] + 0.1*(-1 + 2 * Math.random())};
-                double[] bred2 ={ chromosome[j+1][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j+1][1] + 0.1*(-1 + 2 * Math.random())};
+                //double[] bred1 ={ chromosome[j][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j][1] + 0.1*(-1 + 2 * Math.random())};
+                //double[] bred2 ={ chromosome[j+1][0] + (-1 + 2 * Math.random()) * 0.01 ,chromosome[j+1][1] + 0.1*(-1 + 2 * Math.random())};
 
 
                 chromosome[BREEDING_SIZE + j*2] = bred1;
