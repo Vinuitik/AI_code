@@ -59,6 +59,6 @@ def pegasos(x,y,T,L):
 x,y = read("YES")
 
 theta,theta_0 = pegasos(x,y,1000, 0.05)
-
+#print
 print(theta)
 print(theta_0)
