@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+#comment
 def project_onto_PC(X, pcs, n_components, feature_means):
     """
     Given principal component vectors pcs = principal_components(X)
