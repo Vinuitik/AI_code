@@ -3,7 +3,7 @@ package kings;
 import java.util.LinkedList;
 import org.jfree.data.xy.XYSeries;
 
-public class KMeans {
+public class KMeans { // K-means Class
     public KMeans() {}
 
     public static LinkedList<XYSeries> perform(int k, XYSeries data) {
