@@ -1,4 +1,4 @@
-import cv2 #library
+import cv2 #library см2
 import mediapipe as mp
 from OpenGL.GL import *
 from OpenGL.GLUT import *
