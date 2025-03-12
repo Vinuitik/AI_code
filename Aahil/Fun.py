@@ -13,7 +13,7 @@ x_rotation = 0
 y_rotation = 0
 
 # OpenGL cube vertices
-vertices = [
+vertices = [ 
     [1, 1, -1],
     [1, -1, -1],
     [-1, -1, -1],
