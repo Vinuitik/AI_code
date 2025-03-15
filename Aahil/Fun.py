@@ -9,7 +9,7 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 
 # Rotation variables
-x_rotation = 0
+x_rotation = 0 
 y_rotation = 0
 
 # OpenGL cube vertices
