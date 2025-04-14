@@ -4,7 +4,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *  
 from OpenGL.GLU import * 
 
-# MediaPipe setup
+# MediaPipe setup 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 
