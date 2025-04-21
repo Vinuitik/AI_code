@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 from OpenGL.GL import * 
-from OpenGL.GLUT import *
+from OpenGL.GLUT import * 
 from OpenGL.GLU import *  
 
 # MediaPipe setup 
