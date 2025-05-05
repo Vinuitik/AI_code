@@ -1,8 +1,8 @@
-import cv2 
+import cv2
 import mediapipe as mp
-from OpenGL.GL import * 
-from OpenGL.GLUT import * 
-from OpenGL.GLU import *  
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
     
 # MediaPipe setup 
 mp_hands = mp.solutions.hands
